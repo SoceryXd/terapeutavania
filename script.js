@@ -1,0 +1,58 @@
+const menuBtn = document.querySelector('#menuBtn');
+const nav = document.querySelector('#nav');
+const year = document.querySelector('#year');
+
+if (year) {
+  year.textContent = new Date().getFullYear();
+}
+
+if (menuBtn && nav) {
+  menuBtn.addEventListener('click', () => {
+    nav.classList.toggle('open');
+  });
+}
+
+document.querySelectorAll('.nav a').forEach(link => {
+  link.addEventListener('click', () => {
+    nav.classList.remove('open');
+  });
+});
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.16 });
+
+document.querySelectorAll('.reveal').forEach(el => {
+  observer.observe(el);
+});
+
+const form = document.querySelector('#contactForm');
+const status = document.querySelector('#formStatus');
+
+if (form) {
+  form.addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    if (status) {
+      status.textContent = 'Redirecionando...';
+    }
+
+    const nome = form.querySelector('[name="name"]').value;
+    const email = form.querySelector('[name="email"]').value;
+    const mensagem = form.querySelector('[name="message"]').value;
+
+    const texto = `Olá, Vânia! Meu nome é ${nome}. Meu e-mail é ${email}. Mensagem: ${mensagem}`;
+
+    const whatsappUrl = `https://wa.me/5511955916420?text=${encodeURIComponent(texto)}`;
+
+    window.open(whatsappUrl, '_blank');
+
+    setTimeout(() => {
+      window.location.href = 'obrigado.html';
+    }, 800);
+  });
+}
